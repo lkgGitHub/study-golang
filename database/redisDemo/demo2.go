@@ -48,6 +48,7 @@ func getCmd(args []string) []byte {
 	return cmdByte
 }
 
+// 处理redis返回信息
 func dealReply(reply []byte) (interface{}, error) {
 
 	responseType := reply[0]
@@ -128,7 +129,7 @@ func main() {
 
 	cmd := getCmd(args)
 
-	conn.Write(cmd)
+	_, _ = conn.Write(cmd)
 
 	buf := make([]byte, 1024)
 
