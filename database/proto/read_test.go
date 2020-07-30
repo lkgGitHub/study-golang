@@ -7,84 +7,68 @@ import (
 	"strings"
 	"testing"
 )
+/*
+For Simple Strings the first byte of the reply is "+"
+For Errors the first byte of the reply is "-"
+For Integers the first byte of the reply is ":"
+For Bulk Strings the first byte of the reply is "$"
+For Arrays the first byte of the reply is "*"
+
+"+OK\r\n" ==> "OK";
+"-Error message\r\n" ==> nil
+":1000\r\n" ==> 1000。
+"$6\r\nfoobar\r\n" ==> foobar   , "$-1\r\n" ==> key 不存在
+"*2\r\n$3\r\nfoo\r\n$3\r\nbar\r\n" ==> ["foo","bar"]
+"*3\r\n:1\r\n:2\r\n:3\r\n" ==> [1, 2, 3]
+
+*/
 
 func TestParseReply(t *testing.T)  {
 	replyMap := make(map[string]interface{})
-	replyMap["+OK\r\n"] = "OK"
-	replyMap["-Error message\r\n"] = nil
-	replyMap[":100\r\n"] = int64(100)
-	replyMap["$5\r\nhello\r\n"] = "hello"
-	replyMap["*2\r\n$5\r\nhello\r\n$5\r\nworld\r\n"] = [2]interface{}{"hello",  "world"}
+	//replyMap["+OK\r\n"] = "OK"
+	//replyMap["-Error message\r\n"] = nil
+	//replyMap[":100\r\n"] = int64(100)
+	replyMap["$0\r\n\r\n"] = int64(0) // Null Bulk String.
+	replyMap["$-1\r\n"] = ""   // Null Bulk String.
+	//replyMap["$5\r\nhello\r\n"] = "hello"
 
 	for key, value := range replyMap{
-		var reply interface{}
-		if strings.HasPrefix(key, "*"){
-			reply = ParseReply(t, key, multiBulkParse)
-		}else{
-			reply = ParseReply(t, key, nil)
-		}
-		if value == reply{
+		var parseReply interface{}
+
+		parseReply = ParseReply(t, key)
+
+		if value == parseReply{
 			fmt.Println("success: ", value)
 		}else {
-			fmt.Printf("error: value: %s, reply: %s \r\n", value, reply)
+			fmt.Printf("error: value: %s, reply: %s \r\n", value, parseReply)
 		}
 	}
 
-	//ParseReply(t, "+OK\r\n", nil)
-	//ParseReply(t, ":100\r\n", nil)
-	//ParseReply(t, "-Error message\r\n", nil)
-	//ParseReply(t, "$5\r\nhello\r\n", nil)
-	//ParseReply(t, "*2\r\n$5\r\nhello\r\n$5\r\nworld\r\n", multiBulkParse)
+	//reply := "*2\r\n$5\r\nhello\r\n$5\r\nworld\r\n"
+	//reply := "*2\r\n$3\r\nfoo\r\n$3\r\nbar\r\n"
+	//reply := "*3\r\n:1\r\n:2\r\n:3\r\n"
+	//reply := "*5\r\n:1\r\n:2\r\n:3\r\n:4\r\n$6\r\nfoobar\r\n"
+	//reply1 := "*0\r\n"
+	reply := "*-1\r\n"
+	parseReply := ParseReply(t, reply)
+	fmt.Println(parseReply)
 }
 
-
-func BenchmarkReader_ParseReply_Status(b *testing.B) {
-	benchmarkParseReply(b, "+OK\r\n", nil, false)
-}
-
-func BenchmarkReader_ParseReply_Int(b *testing.B) {
-	benchmarkParseReply(b, ":100\r\n", nil, false)
-}
-
-func BenchmarkReader_ParseReply_Error(b *testing.B) {
-	benchmarkParseReply(b, "-Error message\r\n", nil, true)
-}
-
-func BenchmarkReader_ParseReply_String(b *testing.B) {
-	benchmarkParseReply(b, "$5\r\nhello\r\n", nil, false)
-}
-
-func BenchmarkReader_ParseReply_Slice(b *testing.B) {
-	benchmarkParseReply(b, "*2\r\n$5\r\nhello\r\n$5\r\nworld\r\n", multiBulkParse, false)
-}
-
-func ParseReply(t *testing.T, reply string, m proto.MultiBulkParse) interface{} {
+func ParseReply(t *testing.T, reply string) interface{} {
 	buf := new(bytes.Buffer)
 	buf.WriteString(reply)
 	p := proto.NewReader(buf)
-	replyStr, err := p.ReadReply(m)
+	var multi proto.MultiBulkParse
+	if strings.HasPrefix(reply, "*"){
+		multi = multiBulkParse
+	}
+	replyStr, err := p.ReadReply(multi)
 	//fmt.Println(replyStr)
-	if err != nil {
-		//t.Errorf(err.Error())
+	if !strings.HasPrefix(reply, "-") && err != nil {
+		fmt.Println("replyStr: ", replyStr)
+		t.Errorf(err.Error())
 	}
 	return replyStr
-}
-
-func benchmarkParseReply(b *testing.B, reply string, m proto.MultiBulkParse, wanterr bool) {
-	buf := new(bytes.Buffer)
-	for i := 0; i < b.N; i++ {
-		buf.WriteString(reply)
-	}
-	p := proto.NewReader(buf)
-	b.ResetTimer()
-
-	for i := 0; i < b.N; i++ {
-		replyStr, err := p.ReadReply(m)
-		fmt.Println(replyStr)
-		if !wanterr && err != nil {
-			b.Fatal(err)
-		}
-	}
 }
 
 func multiBulkParse(p *proto.Reader, n int64) (interface{}, error) {

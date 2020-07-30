@@ -41,18 +41,6 @@ func NewReader(rd io.Reader) *Reader {
 	}
 }
 
-func (r *Reader) Buffered() int {
-	return r.rd.Buffered()
-}
-
-func (r *Reader) Peek(n int) ([]byte, error) {
-	return r.rd.Peek(n)
-}
-
-func (r *Reader) Reset(rd io.Reader) {
-	r.rd.Reset(rd)
-}
-
 func (r *Reader) ReadLine() ([]byte, error) {
 	line, err := r.readLine()
 	if err != nil {
@@ -64,9 +52,6 @@ func (r *Reader) ReadLine() ([]byte, error) {
 	return line, nil
 }
 
-// readLine that returns an error if:
-//   - there is a pending read error;
-//   - or line does not end with \r\n.
 func (r *Reader) readLine() ([]byte, error) {
 	b, err := r.rd.ReadSlice('\n')
 	if err != nil {
@@ -162,7 +147,7 @@ func isNilReply(b []byte) bool {
 }
 
 func ParseErrorReply(line []byte) error {
-	return RedisError(string(line[1:]))
+	return RedisError(line[1:])
 }
 
 func parseArrayLen(line []byte) (int64, error) {
@@ -171,143 +156,3 @@ func parseArrayLen(line []byte) (int64, error) {
 	}
 	return strconv.ParseInt(string(line[1:]), 10, 64)
 }
-
-//func (r *Reader) readTmpBytesReply() ([]byte, error) {
-//	line, err := r.ReadLine()
-//	if err != nil {
-//		return nil, err
-//	}
-//	switch line[0] {
-//	case ErrorReply:
-//		return nil, ParseErrorReply(line)
-//	case StringReply:
-//		return r._readTmpBytesReply(line)
-//	case StatusReply:
-//		return line[1:], nil
-//	default:
-//		return nil, fmt.Errorf("redis: can't parse string reply: %.100q", line)
-//	}
-//}
-
-//func (r *Reader) ReadUint() (uint64, error) {
-//	b, err := r.readTmpBytesReply()
-//	if err != nil {
-//		return 0, err
-//	}
-//	return strconv.ParseUint(string(b), 10, 64)
-//}
-
-
-//func (r *Reader) ReadIntReply() (int64, error) {
-//	line, err := r.ReadLine()
-//	if err != nil {
-//		return 0, err
-//	}
-//	switch line[0] {
-//	case ErrorReply:
-//		return 0, ParseErrorReply(line)
-//	case IntReply:
-//		return strconv.ParseInt(string(line[1:]), 10, 64)
-//	default:
-//		return 0, fmt.Errorf("redis: can't parse int reply: %.100q", line)
-//	}
-//}
-
-//func (r *Reader) ReadString() (string, error) {
-//	line, err := r.ReadLine()
-//	if err != nil {
-//		return "", err
-//	}
-//	switch line[0] {
-//	case ErrorReply:
-//		return "", ParseErrorReply(line)
-//	case StringReply:
-//		return r.readStringReply(line)
-//	case StatusReply:
-//		return string(line[1:]), nil
-//	case IntReply:
-//		return string(line[1:]), nil
-//	default:
-//		return "", fmt.Errorf("redis: can't parse reply=%.100q reading string", line)
-//	}
-//}
-//func (r *Reader) ReadArrayReply(m MultiBulkParse) (interface{}, error) {
-//	line, err := r.ReadLine()
-//	if err != nil {
-//		return nil, err
-//	}
-//	switch line[0] {
-//	case ErrorReply:
-//		return nil, ParseErrorReply(line)
-//	case ArrayReply:
-//		n, err := parseArrayLen(line)
-//		if err != nil {
-//			return nil, err
-//		}
-//		return m(r, n)
-//	default:
-//		return nil, fmt.Errorf("redis: can't parse array reply: %.100q", line)
-//	}
-//}
-
-//func (r *Reader) ReadArrayLen() (int64, error) {
-//	line, err := r.ReadLine()
-//	if err != nil {
-//		return 0, err
-//	}
-//	switch line[0] {
-//	case ErrorReply:
-//		return 0, ParseErrorReply(line)
-//	case ArrayReply:
-//		return parseArrayLen(line)
-//	default:
-//		return 0, fmt.Errorf("redis: can't parse array reply: %.100q", line)
-//	}
-//}
-
-//func (r *Reader) ReadScanReply() ([]string, uint64, error) {
-//	n, err := r.ReadArrayLen()
-//	if err != nil {
-//		return nil, 0, err
-//	}
-//	if n != 2 {
-//		return nil, 0, fmt.Errorf("redis: got %d elements in scan reply, expected 2", n)
-//	}
-//
-//	cursor, err := r.ReadUint()
-//	if err != nil {
-//		return nil, 0, err
-//	}
-//
-//	n, err = r.ReadArrayLen()
-//	if err != nil {
-//		return nil, 0, err
-//	}
-//
-//	keys := make([]string, n)
-//	for i := int64(0); i < n; i++ {
-//		key, err := r.ReadString()
-//		if err != nil {
-//			return nil, 0, err
-//		}
-//		keys[i] = key
-//	}
-//
-//	return keys, cursor, err
-//}
-
-//func (r *Reader) ReadInt() (int64, error) {
-//	b, err := r.readTmpBytesReply()
-//	if err != nil {
-//		return 0, err
-//	}
-//	return strconv.ParseInt(string(b), 10, 64)
-//}
-
-//func (r *Reader) ReadFloatReply() (float64, error) {
-//	b, err := r.readTmpBytesReply()
-//	if err != nil {
-//		return 0, err
-//	}
-//	return 	strconv.ParseFloat(string(b), 64)
-//}
