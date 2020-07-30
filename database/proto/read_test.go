@@ -25,22 +25,21 @@ For Arrays the first byte of the reply is "*"
 
 func TestParseReply(t *testing.T)  {
 	replyMap := make(map[string]interface{})
-	//replyMap["+OK\r\n"] = "OK"
-	//replyMap["-Error message\r\n"] = nil
-	//replyMap[":100\r\n"] = int64(100)
-	replyMap["$0\r\n\r\n"] = int64(0) // Null Bulk String.
-	replyMap["$-1\r\n"] = ""   // Null Bulk String.
-	//replyMap["$5\r\nhello\r\n"] = "hello"
+	replyMap["+OK\r\n"] = "OK"
+	replyMap["-Error message\r\n"] = nil
+	replyMap[":100\r\n"] = int64(100)
+	replyMap["$0\r\n\r\n"] = "" // Null Bulk String.
+	replyMap["$-1\r\n"] = nil   // Null Bulk String.
+	replyMap["$5\r\nhello\r\n"] = "hello"
 
 	for key, value := range replyMap{
 		var parseReply interface{}
-
-		parseReply = ParseReply(t, key)
+		parseReply = ParseReply(t, key, true)
 
 		if value == parseReply{
-			fmt.Println("success: ", value)
+			fmt.Println("success: ", parseReply)
 		}else {
-			fmt.Printf("error: value: %s, reply: %s \r\n", value, parseReply)
+			fmt.Printf("error: key: %s, reply: %s \r\n", key, parseReply)
 		}
 	}
 
@@ -48,13 +47,15 @@ func TestParseReply(t *testing.T)  {
 	//reply := "*2\r\n$3\r\nfoo\r\n$3\r\nbar\r\n"
 	//reply := "*3\r\n:1\r\n:2\r\n:3\r\n"
 	//reply := "*5\r\n:1\r\n:2\r\n:3\r\n:4\r\n$6\r\nfoobar\r\n"
-	//reply1 := "*0\r\n"
-	reply := "*-1\r\n"
-	parseReply := ParseReply(t, reply)
-	fmt.Println(parseReply)
+	//reply := "*0\r\n"  // 返回[]
+	reply := "*-1\r\n"  //返回 nil
+	parseReply := ParseReply(t, reply, true)
+	fmt.Println("parseReply: ", parseReply)
 }
 
-func ParseReply(t *testing.T, reply string) interface{} {
+
+ // reply: 需要解析的字符串; wanter: 当有错误时，是否通过测试。 true 返回值（空或者nil),false 不返回,报错；
+func ParseReply(t *testing.T, reply string, wanter bool) interface{} {
 	buf := new(bytes.Buffer)
 	buf.WriteString(reply)
 	p := proto.NewReader(buf)
@@ -63,8 +64,9 @@ func ParseReply(t *testing.T, reply string) interface{} {
 		multi = multiBulkParse
 	}
 	replyStr, err := p.ReadReply(multi)
+
 	//fmt.Println(replyStr)
-	if !strings.HasPrefix(reply, "-") && err != nil {
+	if !wanter && err != nil {
 		fmt.Println("replyStr: ", replyStr)
 		t.Errorf(err.Error())
 	}
