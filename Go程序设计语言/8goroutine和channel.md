@@ -1,0 +1,1 @@
+goroutine和channel，其支持“顺序通信进程”(communicating sequential processes)或被简称为CSP。
