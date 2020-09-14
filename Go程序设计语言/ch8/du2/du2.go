@@ -10,7 +10,11 @@ import (
 	"time"
 )
 
-func main1() {
+func main() {
+	go func() {
+		os.Stdin.Read(make([]byte, 1))
+		close(done)
+	}()
 
 	// 1. 初始化参数
 	root :=  flag.String("f", ".", "files")
@@ -49,20 +53,20 @@ func main1() {
 	var nfiles, nbytes int64
 	// 这里的break语句用到了标签break("loop"），这样可以同时终结select和for两个循环；
 	// 如果没有用标签就break的话只会退出内层的select循环，而外层的for循环会使之进入下一轮select循环。”
-	loop:
-		for {
-			select {
-			case size, ok := <-fileSeizes:
-				if !ok {
-					break loop // fileSizes was closed
-				}
-				nfiles++
-				nbytes += size
-			case <- tick:
-				printDiskUsage(nfiles, nbytes)
+loop:
+	for {
+		select {
+		case size, ok := <-fileSeizes:
+			if !ok {
+				break loop // fileSizes was closed
 			}
-
+			nfiles++
+			nbytes += size
+		case <- tick:
+			printDiskUsage(nfiles, nbytes)
 		}
+
+	}
 	// 只打印最后结果
 	//for size:= range fileSeizes{
 	//	nfiles++
@@ -77,6 +81,9 @@ func printDiskUsage(nfiles int64, nbytes int64) {
 
 func walkDir(dir string, s *sync.WaitGroup, fileSize chan<- int64) {
 	defer s.Done()
+	if cancelled() {
+		return
+	}
 	for _, entry := range dirents(dir){
 		if entry.IsDir(){
 			subdir := filepath.Join(dir, entry.Name())
@@ -91,7 +98,11 @@ func walkDir(dir string, s *sync.WaitGroup, fileSize chan<- int64) {
 var sema = make(chan struct{}, 20)
 // dirents returns the entries of directory dir.
 func dirents(dir string) []os.FileInfo {
-	sema <- struct{}{}
+	select {
+	case sema <- struct{}{}:
+	case <- done:
+		return nil
+	}
 	defer func() {<-sema}() // 控制并发，保并发只有20个
 
 	entries, err := ioutil.ReadDir(dir)
@@ -100,6 +111,17 @@ func dirents(dir string) []os.FileInfo {
 		return nil
 	}
 	return entries
+}
+
+var done = make(chan struct{})
+
+func cancelled() bool {
+	select {
+	case <- done:
+		return true
+	default:
+		return false
+	}
 }
 
 func direntsPrint()  {
