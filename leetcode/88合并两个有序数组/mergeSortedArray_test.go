@@ -23,6 +23,7 @@ func TestMerge(t *testing.T) {
 	}
 }
 
+// 双指针法，利用短路|| 来避免切片指针越界
 func merge(nums1 []int, m int, nums2 []int, n int)  {
 	var result []int
 	i := 0
@@ -43,29 +44,3 @@ func merge(nums1 []int, m int, nums2 []int, n int)  {
 	fmt.Printf("===>%+v \n", nums1)
 
 }
-
-func merge2(nums1 []int, m int, nums2 []int, n int)  {
-	var result []int
-	copy(result, nums1)
-
-	i := 0
-	j := 0
-	for r:=0;r<m+n ;r++ {
-		if i == m && j == n {
-			nums1 = result
-			break
-		}
-
-		if i < m && nums1[i] <= nums2[j] || j == n{
-			result = append(result, nums1[i])
-			i++
-		}
-		if j < n && nums1[i] > nums2[j] || i == m {
-			result = append(result, nums2[j])
-			j++
-		}
-	}
-	copy(nums1, result)
-	fmt.Printf("===>%+v", nums1)
-}
-
