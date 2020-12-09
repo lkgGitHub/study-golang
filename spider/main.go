@@ -12,19 +12,19 @@ import (
 )
 
 const (
-	name= "博天堂资源站"
-	uri= "https://bttzyw.com"
-	httpApi= "http://bttcj.com/inc/sapi.php"
-	httpsApi= "http://bttcj.com/inc/sapi.php"
+	name     = "博天堂资源站"
+	uri      = "https://bttzyw.com"
+	httpApi  = "http://bttcj.com/inc/sapi.php"
+	httpsApi = "http://bttcj.com/inc/sapi.php"
 	//httpApi = "http://sscj8.com/inc/api.php"
 	//http://bttcj.com/inc/sapi.php?ac=videolist&ids=
 )
 
-func main()  {
+func main() {
 	url := fmt.Sprintf("%s?ac=list&t=2&pg=1", httpApi) // t=2
 
 	resp, _ := http.Get(url)
-	defer  resp.Body.Close()
+	defer resp.Body.Close()
 	body, _ := ioutil.ReadAll(resp.Body)
 
 	rss := &Rss{}
@@ -33,7 +33,7 @@ func main()  {
 		println(err)
 	}
 	ids := make([]string, 0)
-	for _, v := range rss.List.Video{
+	for _, v := range rss.List.Video {
 		ids = append(ids, v.ID)
 	}
 
@@ -42,18 +42,18 @@ func main()  {
 	videoListURL := "http://bttcj.com/inc/sapi.php?ac=videolist&ids=" + idsStr
 
 	videoResp, _ := http.Get(videoListURL)
-	defer  videoResp.Body.Close()
+	defer videoResp.Body.Close()
 	videoRespByte, _ := ioutil.ReadAll(videoResp.Body)
 	err = xml.Unmarshal(videoRespByte, rss)
 	if err != nil {
 		println(err)
 	}
-	for _, v := range rss.List.Video{
+	for _, v := range rss.List.Video {
 		if v.Dl.Dd.Text != "" {
 			t := v.Dl.Dd.Text
 			fmt.Println(v.Name, t[8:len(t)-9])
-			imagResp :=  &http.Response{}
-			for i:=0;i<3;i++ {
+			imagResp := &http.Response{}
+			for i := 0; i < 3; i++ {
 				imagResp, err = http.Get(v.Pic)
 				if err != nil {
 					println(err.Error())
@@ -76,8 +76,6 @@ func main()  {
 			}
 		}
 	}
-
-
 
 }
 
