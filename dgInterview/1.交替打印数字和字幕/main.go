@@ -67,8 +67,8 @@ func mySolution() {
 						i++
 						letter <- i
 					} else {
+						println()
 						close(letter)
-						break
 					}
 				} else {
 					break loop
