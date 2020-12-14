@@ -12,7 +12,7 @@ s[0] = 'L' // compile error: cannot assign to s[0]
 */
 func main() {
 	s := "abcde"
-	if r, ok := solution2(s); ok {
+	if r, ok := solution(s); ok {
 		println(r)
 	} else {
 		println("error")
@@ -20,6 +20,8 @@ func main() {
 
 }
 
+//  []rune(s), 它可以将字符串转化成 unicode 码点， rune 表示四个字节
+//  字符串截取，将利用 [] rune 转换成 unicode 码点， 再利用 string 转化回去
 func solution(s string) (string, bool) {
 	str := []rune(s)
 	size := len(str)

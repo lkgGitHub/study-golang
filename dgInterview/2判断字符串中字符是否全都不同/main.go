@@ -5,9 +5,10 @@ import (
 )
 
 func main() {
-	println(solution2("abcadefgz"))
+	println(solution("ABC"))
 }
 
+// 字符串的range 后是 UTF8编码的Unicode码点（rune）序列
 func solution(str string) bool {
 	if len(str) > 3000 {
 		return false
