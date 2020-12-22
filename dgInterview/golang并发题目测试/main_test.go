@@ -12,6 +12,7 @@ import (
 var mu sync.Mutex
 var chain string
 
+// Mutex 是互斥锁。
 // fatal error: all goroutines are asleep - deadlock!
 func TestDemo(t *testing.T) {
 	chain = "main"
@@ -61,6 +62,7 @@ func C2() {
 	defer rwMu.RUnlock()
 }
 
+// WaitGroup 在调用 Wait 之后是不能再调用 Add 方法的。
 // panic: sync: WaitGroup is reused before previous Wait has returned
 func TestDemo3(t *testing.T) {
 	var wg sync.WaitGroup
@@ -76,6 +78,7 @@ func TestDemo3(t *testing.T) {
 }
 
 // 4 双检查实现单例
+// 在多核CPU中，因为CPU缓存会导致多个核心中变量值不同步。
 func TestDemo4(t *testing.T) {
 	o := &Once{}
 	o.Do(func() {
@@ -107,12 +110,14 @@ type MyMutex struct {
 	sync.Mutex
 }
 
-// 变量声明将锁定值复制到 'mu2': 类型 'MyMutex' 为 'sync.Locker'
-// 检查信息: Checks for locks mistakenly passed by value.
+
+// 加锁后复制变量，会将锁的状态也复制，所以mu1 其实是已经加锁状态，再加锁会死锁。
 func TestDemo5(t *testing.T) {
 	var mu MyMutex
 	mu.Lock()
-	var mu2 = mu // 变量声明将锁定值复制到 'mu2': 类型 'MyMutex' 为 'sync.Locker'
+	// 变量声明将锁定值复制到 'mu2': 类型 'MyMutex' 为 'sync.Locker'
+	// 检查信息: Checks for locks mistakenly passed by value.
+	var mu2 = mu
 	println("over: mu2 = mu")
 	mu.count++
 	mu.Unlock()
@@ -126,6 +131,9 @@ func TestDemo5(t *testing.T) {
 
 var pool = sync.Pool{New: func() interface{} { return new(bytes.Buffer) }}
 
+// sync.Pool 是协程安全的
+// 个人理解，在单核CPU中，内存可能会稳定在256MB，如果是多核可能会暴涨。
+//  ？？？
 func TestDemo6(t *testing.T) {
 	go func() {
 		for {
@@ -153,4 +161,43 @@ func processRequest(size int) {
 	b.Grow(size)
 	pool.Put(b)
 	time.Sleep(1 * time.Millisecond)
+}
+
+// panic: close of nil channel
+// ch 未有被初始化，关闭时会报错。
+// ch 必须使用 make 进行初始化后才能使用
+func TestDemo8(t *testing.T) {
+	var ch chan int
+	var count int
+	go func() {
+		ch <- 1
+	}()
+	go func() {
+		count++
+		close(ch)
+	}()
+	<-ch
+	fmt.Println(count)
+}
+
+// sync.Map 没有 Len 方法
+func TestDemo9(t *testing.T) {
+	var m sync.Map
+	m.LoadOrStore("a", 1)
+	m.Delete("a")
+	fmt.Println(m.Load("a"))
+}
+
+
+func TestDemo10(t *testing.T) {
+		go f()
+		c <- 0 // c <- 0 会阻塞依赖于 f() 的执行
+		println("a:", a)
+
+}
+var c = make(chan int)
+var a int
+func f() {
+	a = 1
+	<-c
 }
