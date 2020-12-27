@@ -110,7 +110,6 @@ type MyMutex struct {
 	sync.Mutex
 }
 
-
 // 加锁后复制变量，会将锁的状态也复制，所以mu1 其实是已经加锁状态，再加锁会死锁。
 func TestDemo5(t *testing.T) {
 	var mu MyMutex
@@ -129,11 +128,9 @@ func TestDemo5(t *testing.T) {
 	fmt.Println(mu.count, mu2.count)
 }
 
-var pool = sync.Pool{New: func() interface{} { return new(bytes.Buffer) }}
-
+// todo ???
 // sync.Pool 是协程安全的
 // 个人理解，在单核CPU中，内存可能会稳定在256MB，如果是多核可能会暴涨。
-//  ？？？
 func TestDemo6(t *testing.T) {
 	go func() {
 		for {
@@ -155,6 +152,9 @@ func TestDemo6(t *testing.T) {
 		runtime.GC()
 	}
 }
+
+var pool = sync.Pool{New: func() interface{} { return new(bytes.Buffer) }}
+
 func processRequest(size int) {
 	b := pool.Get().(*bytes.Buffer)
 	time.Sleep(500 * time.Millisecond)
@@ -188,15 +188,16 @@ func TestDemo9(t *testing.T) {
 	fmt.Println(m.Load("a"))
 }
 
-
 func TestDemo10(t *testing.T) {
-		go f()
-		c <- 0 // c <- 0 会阻塞依赖于 f() 的执行
-		println("a:", a)
+	go f()
+	c <- 0 // c <- 0 会阻塞依赖于 f() 的执行
+	println("a:", a)
 
 }
+
 var c = make(chan int)
 var a int
+
 func f() {
 	a = 1
 	<-c

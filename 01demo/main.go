@@ -6,7 +6,34 @@ import (
 	"time"
 )
 
+type Param map[string]interface{}
+
+type Show struct {
+	Param
+}
+
 func main() {
+	//s := new(Show)
+	//s.Param = map[string]interface{}{"RMB": 1000}
+
+	b := &Show{
+		Param: map[string]interface{}{"RMB": 1000},
+	}
+	fmt.Printf("%v", b)
+}
+
+//func main() {
+//	var x int
+//	inc := func() int {
+//		x++
+//		return x
+//	}
+//	fmt.Println(func() (a, b int) {
+//		return inc(), inc()
+//	}())
+//}
+
+func test2() {
 	abort := make(chan struct{})
 	go func() {
 		for {

@@ -21,7 +21,7 @@ const (
 )
 
 func main() {
-	url := fmt.Sprintf("%s?ac=list&t=2&pg=1", httpApi) // t=2
+	url := fmt.Sprintf("%s?ac=list&t=2&pg=4", httpApi) // t=2
 
 	resp, _ := http.Get(url)
 	defer resp.Body.Close()
