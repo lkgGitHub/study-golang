@@ -17,3 +17,7 @@ func TestAsyncProducerGoroutines(t *testing.T) {
 func TestAsyncProducerSelect(t *testing.T) {
 	AsyncProducerSelect()
 }
+
+func TestConsumer(t *testing.T) {
+	Consumer()
+}
