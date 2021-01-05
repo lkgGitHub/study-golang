@@ -30,7 +30,7 @@ func SyncProducer() {
 }
 
 func AsyncProducerGoroutines(){
-	config := &sarama.Config{}
+	config := sarama.NewConfig()
 	config.Producer.Return.Successes = true
 	producer, err := sarama.NewAsyncProducer([]string{broker}, config)
 	if err != nil {
@@ -50,6 +50,7 @@ func AsyncProducerGoroutines(){
 	go func() {
 		defer wg.Done()
 		for range producer.Successes() {
+			println("success:", successes)
 			successes++
 		}
 	}()
@@ -102,6 +103,7 @@ ProducerLoop:
 	for {
 		select {
 		case producer.Input() <- &sarama.ProducerMessage{Topic: topic, Key: nil, Value: sarama.StringEncoder("testing 123")}:
+			log.Println("enqueued:", enqueued)
 			enqueued++
 		case err := <-producer.Errors():
 			log.Println("Failed to produce message", err)
