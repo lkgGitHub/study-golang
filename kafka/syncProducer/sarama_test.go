@@ -21,3 +21,7 @@ func TestAsyncProducerSelect(t *testing.T) {
 func TestConsumer(t *testing.T) {
 	Consumer()
 }
+
+func TestConsumerGroup(t *testing.T) {
+	ConsumerGroup()
+}

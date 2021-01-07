@@ -1,13 +1,15 @@
 package syncProducer
 
 import (
+	"fmt"
+	"github.com/Shopify/sarama"
 	"log"
 	"os"
 	"os/signal"
-
-	"github.com/Shopify/sarama"
 )
 
+// todo 1. 制定了分区，只能消费单个分区
+// todo 2. 消费完没有通知kafka，已经消费。重复消费
 func Consumer() {
 	config := sarama.NewConfig()
 	consumer, err := sarama.NewConsumer([]string{broker}, config)
@@ -21,7 +23,7 @@ func Consumer() {
 		}
 	}()
 
-	partitionConsumer, err := consumer.ConsumePartition(topic, 0, sarama.OffsetNewest)
+	partitionConsumer, err := consumer.ConsumePartition(topic, 0, sarama.OffsetOldest)
 	if err != nil {
 		panic(err)
 	}
@@ -41,7 +43,7 @@ ConsumerLoop:
 	for {
 		select {
 		case msg := <-partitionConsumer.Messages():
-			log.Printf("Consumed message offset %d\n", msg.Offset)
+			fmt.Printf("Message topic:%q partition:%d offset:%d\n", msg.Topic, msg.Partition, msg.Offset)
 			consumed++
 		case <-signals:
 			break ConsumerLoop

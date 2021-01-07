@@ -12,12 +12,13 @@ import (
 )
 
 const (
-	Broken = "192.168.5.76:32400"
-	Topic  = "test_topic"
+	Broken = "192.168.2.100:32400"
+	Topic  = "clusterf"
+	groupID = "atlas"
 )
 
 func main() {
-	group, err := sarama.NewConsumerGroup([]string{Broken}, "my-group", nil)
+	group, err := sarama.NewConsumerGroup([]string{Broken}, groupID, nil)
 	if err != nil {
 		panic(err)
 	}
