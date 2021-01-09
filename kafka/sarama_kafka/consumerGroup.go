@@ -3,7 +3,6 @@ package saramaKafka
 import (
 	"context"
 	"fmt"
-
 	"github.com/Shopify/sarama"
 )
 
@@ -13,15 +12,16 @@ func (ConsumerGroupHandler) Setup(_ sarama.ConsumerGroupSession) error   { retur
 func (ConsumerGroupHandler) Cleanup(_ sarama.ConsumerGroupSession) error { return nil }
 func (c ConsumerGroupHandler) ConsumeClaim(cgs sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
 	for msg := range claim.Messages() {
-		fmt.Printf("Message topic:%q partition:%d offset:%d\n", msg.Topic, msg.Partition, msg.Offset)
+		fmt.Printf("message topic:%q partition:%d offset:%d\n", msg.Topic, msg.Partition, msg.Offset)
 		cgs.MarkMessage(msg, "")
 	}
 	return nil
 }
 
-func main() {
+func ConsumerGroup() {
 	config := sarama.NewConfig()
 	config.Consumer.Return.Errors = true
+	config.Consumer.Offsets.Initial = sarama.OffsetOldest
 
 	group, err := sarama.NewConsumerGroup([]string{broker}, topic, config)
 	if err != nil {
