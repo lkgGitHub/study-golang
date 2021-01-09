@@ -1,8 +1,10 @@
-package syncProducer
+package saramaKafka
 
-import "fmt"
-import "github.com/Shopify/sarama"
+import (
+	"fmt"
 
+	"github.com/Shopify/sarama"
+)
 
 func BrokerInfo() {
 	broker := sarama.NewBroker(broker)
@@ -11,7 +13,7 @@ func BrokerInfo() {
 		panic(err)
 	}
 
-	request :=  sarama.MetadataRequest{Topics: []string{topic}}
+	request := sarama.MetadataRequest{Topics: []string{topic}}
 	response, err := broker.GetMetadata(&request)
 	if err != nil {
 		_ = broker.Close()

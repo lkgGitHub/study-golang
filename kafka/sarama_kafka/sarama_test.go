@@ -1,4 +1,4 @@
-package syncProducer
+package saramaKafka
 
 import "testing"
 

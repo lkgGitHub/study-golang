@@ -1,35 +1,15 @@
-package syncProducer
+package saramaKafka
 
 import (
-	"github.com/Shopify/sarama"
 	"log"
 	"os"
 	"os/signal"
 	"sync"
+
+	"github.com/Shopify/sarama"
 )
 
-
-func SyncProducer() {
-	producer, err := sarama.NewSyncProducer([]string{broker}, nil)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	defer func() {
-		if err := producer.Close(); err != nil {
-			log.Fatalln(err)
-		}
-	}()
-
-	msg := &sarama.ProducerMessage{Topic: topic, Value: sarama.StringEncoder("testing 123")}
-	partition, offset, err := producer.SendMessage(msg)
-	if err != nil {
-		log.Printf("FAILED to send message: %s\n", err)
-	} else {
-		log.Printf("> message sent to partition %d at offset %d\n", partition, offset)
-	}
-}
-
-func AsyncProducerGoroutines(){
+func AsyncProducerGoroutines() {
 	config := sarama.NewConfig()
 	config.Producer.Return.Successes = true
 	producer, err := sarama.NewAsyncProducer([]string{broker}, config)
@@ -82,7 +62,7 @@ ProducerLoop:
 	log.Printf("Successfully produced: %d; errors: %d\n", successes, producerErrors)
 }
 
-func AsyncProducerSelect(){
+func AsyncProducerSelect() {
 	producer, err := sarama.NewAsyncProducer([]string{broker}, nil)
 	if err != nil {
 		panic(err)
