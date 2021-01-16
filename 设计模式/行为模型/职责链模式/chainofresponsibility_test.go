@@ -1,6 +1,8 @@
-package chainofresponsibility
+package 职责链模式
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestChainofresponsibility(t *testing.T) {
 	ca := NewConcreteHandlerA()
