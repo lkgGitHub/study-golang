@@ -9,7 +9,6 @@ require (
 	github.com/bmizerany/pq v0.0.0-20131128184720-da2b95e392c1
 	github.com/go-sql-driver/mysql v1.5.0
 	golang.org/x/net v0.0.0-20201021035429-f5854403a974
-	golang.org/x/tools v0.0.0-20201224043029-2b0845dc783e // indirect
 	gopl.io v0.0.0-20200323155855-65c318dde95e
 	xorm.io/xorm v1.0.5
 )
