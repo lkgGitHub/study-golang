@@ -1,4 +1,4 @@
-/*
+/*	数组、指针
 给定一个排序数组，你需要在 原地 删除重复出现的元素，使得每个元素只出现一次，返回移除后数组的新长度。
 不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
 */
@@ -30,6 +30,9 @@ func TestRemoveDuplicates(t *testing.T) {
 }
 
 // 方法：双指针法
+// 复杂度分析
+// 时间复杂度：O(n) O(n)，假设数组的长度是 n，那么 i 和 j 分别最多遍历 n 步。
+// 空间复杂度：O(1) O(1)。
 func removeDuplicates(nums []int) int {
 	if len(nums) < 2 {
 		return len(nums)
