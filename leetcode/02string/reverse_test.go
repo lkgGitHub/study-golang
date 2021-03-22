@@ -37,6 +37,7 @@ import (
 
 相关标签:	数学
 */
+// todo: 弹出和推入数字 & 溢出前进行检查
 
 // 转换成字符串，利用字符串反转。最后再转成int32，超过int32的转换过程中会有error，直接返回0
 func reverse(x int) int {
@@ -71,6 +72,18 @@ func TestReverse(t *testing.T) {
 			t.Error(fmt.Sprintf("reverse failed. expect: %v , actual: %v", tt.expected, actual))
 		}
 	}
+}
+
+func TestReverseDemo2(t *testing.T) {
+	println("12345 / 10000", 12345/10000)
+	println("12345 / 1000", 12345/1000)
+	println("12345 / 100", 12345/100)
+	println("12345 / 10", 12345/10)
+
+	println("12345 % 10000", 12345%10000)
+	println("12345 % 1000", 12345%1000)
+	println("12345 % 100", 12345%100)
+	println("12345 % 10", 12345%10)
 }
 
 func TestReverseDemo(t *testing.T) {
