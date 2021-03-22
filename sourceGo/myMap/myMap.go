@@ -55,3 +55,28 @@ type bmap struct {
 	// us to eliminate padding which would be needed for, e.g., map[int64]int8.
 	// Followed by an overflow pointer.
 }
+
+// 初始化
+// makemap_small implements Go map creation for make(map[k]v) and
+// make(map[k]v, hint) when hint is known to be at most bucketCnt
+// at compile time and the map needs to be allocated on the heap.
+func makemap_small() *hmap {
+	h := &hmap{}
+	h.hash0 = fastrand()
+	return h
+}
+
+//go:nosplit
+func fastrand() uint32 {
+	mp := getg().m
+	// Implement xorshift64+: 2 32-bit xorshift sequences added together.
+	// Shift triplet [17,7,16] was calculated as indicated in Marsaglia's
+	// Xorshift paper: https://www.jstatsoft.org/article/view/v008i14/xorshift.pdf
+	// This generator passes the SmallCrush suite, part of TestU01 framework:
+	// http://simul.iro.umontreal.ca/testu01/tu01.html
+	s1, s0 := mp.fastrand[0], mp.fastrand[1]
+	s1 ^= s1 << 17
+	s1 = s1 ^ s0 ^ s1>>7 ^ s0>>16
+	mp.fastrand[0], mp.fastrand[1] = s0, s1
+	return s0 + s1
+}
