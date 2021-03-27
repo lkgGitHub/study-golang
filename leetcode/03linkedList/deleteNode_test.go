@@ -17,12 +17,6 @@ func deleteNode(node *ListNode) {
 	node.Next = node.Next.Next
 }
 
-//Definition for singly-linked list.
-type ListNode struct {
-	Val  int
-	Next *ListNode
-}
-
 var head = &ListNode{4, &ListNode{5, &ListNode{1, &ListNode{9, nil}}}}
 
 // 实际逻辑和测试
