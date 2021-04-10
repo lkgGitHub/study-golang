@@ -12,9 +12,9 @@ import (
 )
 
 const (
-	Broken = "192.168.2.100:32400"
-	Topic  = "clusterf"
-	groupID = "atlas"
+	Broken = "10.0.6.5:9092" // 测试环境
+	Topic  = "alarm-res"
+	groupID = "godeye"
 )
 
 func main() {
@@ -55,7 +55,7 @@ func (h exampleConsumerGroupHandler) ConsumeClaim(sess sarama.ConsumerGroupSessi
 	for msg := range claim.Messages() {
 		fmt.Printf("Message topic:%q partition:%d offset:%d delay :%s \n",
 			msg.Topic, msg.Partition, msg.Offset, time.Since(msg.Timestamp))
-		//println(msg.Value)
+		println(string(msg.Value))
 		sess.MarkMessage(msg, "")
 	}
 	return nil

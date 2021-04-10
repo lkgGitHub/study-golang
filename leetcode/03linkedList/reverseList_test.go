@@ -19,7 +19,7 @@ import (
 相关标签:	链表
 */
 func reverseList(head *ListNode) *ListNode {
-
+	return head
 }
 
 func TestReverseList(t *testing.T) {
