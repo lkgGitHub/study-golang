@@ -6,6 +6,9 @@ import (
 	"testing"
 )
 
+// 避免重复
+var stairMap = make(map[int]int)
+
 // 递归
 func climbStairs(n int) int {
 	if n == 1 {
@@ -14,9 +17,14 @@ func climbStairs(n int) int {
 	if n == 2 {
 		return 2
 	}
-	var nums int
-	nums += climbStairs(n-1) + climbStairs(n-2)
-	return nums
+	if climb, ok := stairMap[n]; ok {
+		return climb
+	} else {
+		var nums int
+		nums += climbStairs(n-1) + climbStairs(n-2)
+		stairMap[n] = nums
+		return nums
+	}
 }
 
 func TestClimbStairs(t *testing.T) {
@@ -28,6 +36,7 @@ func TestClimbStairs(t *testing.T) {
 		{3, 3},
 		{4, 5},
 		{5, 8},
+		{45, 1836311903},
 	}
 	for _, tt := range tests {
 		actual := climbStairs(tt.n)
