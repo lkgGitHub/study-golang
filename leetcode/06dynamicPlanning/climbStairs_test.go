@@ -6,11 +6,24 @@ import (
 	"testing"
 )
 
+// 循环
+func climbStairs2(n int) int {
+	return 1
+}
+
 // 避免重复
 var stairMap = make(map[int]int)
 
+// 避免堆栈溢出，设置最大递归深度
+var depth uint
+
 // 递归
 func climbStairs(n int) int {
+	depth++
+	if depth > 100 {
+		panic("depth > 100")
+	}
+
 	if n == 1 {
 		return 1
 	}
