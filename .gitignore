@@ -13,7 +13,5 @@
 *.log
 *.DS_Store
 
-*.jpg
-
 .idea
 
