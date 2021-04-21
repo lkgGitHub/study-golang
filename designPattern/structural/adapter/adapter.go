@@ -75,13 +75,8 @@ func (t *Translator) defense() {
 	t.f.defense()
 }
 
-func NewTranslator(name string)Player{
+func NewTranslator(name string) Player {
 	return &Translator{ForeignCenter{
 		name: name,
 	}}
 }
-
-
-
-
-
