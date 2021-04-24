@@ -69,6 +69,18 @@ func selectionSort(nums []int) []int {
 	return nums
 }
 
+func quicksort2(nums []int) {
+
+}
+
+func quicksort(nums []int) []int {
+	if len(nums) <= 1 {
+		return nums
+	}
+
+	return nums
+}
+
 func TestName(t *testing.T) {
 	tests := []struct {
 		nums     []int
@@ -80,7 +92,7 @@ func TestName(t *testing.T) {
 		{[]int{}, []int{}},
 	}
 	for _, tt := range tests {
-		actual := selectionSort(tt.nums)
+		actual := quicksort(tt.nums)
 		isPass := true
 		if len(actual) != len(tt.expected) {
 			t.Errorf("sorted failed. expect: %v, actual: %v", tt.expected, actual)
