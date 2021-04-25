@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"sort"
 	"testing"
 )
 
@@ -73,11 +75,21 @@ func quicksort2(nums []int) {
 
 }
 
-func quicksort(nums []int) []int {
-	if len(nums) <= 1 {
-		return nums
+func quickSort(nums []int, low, height int) {
+	if height > low {
+		return
 	}
+	index := partition(nums, low, height)
+	quickSort(nums, low, index-1)
+	quickSort(nums, index+1, height)
+}
 
+func partition(nums []int, low int, height int) int {
+
+}
+
+func goSort(nums []int) []int {
+	sort.Ints(nums)
 	return nums
 }
 
@@ -86,13 +98,14 @@ func TestName(t *testing.T) {
 		nums     []int
 		expected []int
 	}{
-		{[]int{5, 4, 3, 2, 1}, []int{1, 2, 3, 4, 5}},
-		{[]int{4, 5, 6, 1, 3, 2}, []int{1, 2, 3, 4, 5, 6}},
-		{[]int{1}, []int{1}},
-		{[]int{}, []int{}},
+		{[]int{3, 4, 5, 2, 1}, []int{1, 2, 3, 4, 5}},
+		//{[]int{4, 5, 6, 1, 3, 2}, []int{1, 2, 3, 4, 5, 6}},
+		//{[]int{1}, []int{1}},
+		//{[]int{}, []int{}},
 	}
 	for _, tt := range tests {
-		actual := quicksort(tt.nums)
+		quickSort(tt.nums, 0, len(tt.nums))
+		actual := tt.nums
 		isPass := true
 		if len(actual) != len(tt.expected) {
 			t.Errorf("sorted failed. expect: %v, actual: %v", tt.expected, actual)
@@ -108,4 +121,16 @@ func TestName(t *testing.T) {
 			t.Errorf("sorted failed. expect: %v, actual: %v", tt.expected, actual)
 		}
 	}
+}
+
+func TestDemo(t *testing.T) {
+
+	a := []int{1, 2, 3}
+	fmt.Println(a[0:2])
+	//n := 10
+	//var depth int
+	//for i := n; i > 0; i >>= 1 {
+	//	depth++
+	//}
+	//println(depth * 2)
 }
