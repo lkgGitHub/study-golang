@@ -85,7 +85,7 @@ func quickSort(nums []int, low, height int) {
 }
 
 func partition(nums []int, low int, height int) int {
-
+	return 0
 }
 
 func goSort(nums []int) []int {
