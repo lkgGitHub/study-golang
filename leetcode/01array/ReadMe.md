@@ -5,4 +5,7 @@
 3. rotate 旋转数组，圈数组
 
 
+# 双指针法
+# 删除排序数组中的重复项 removeDuplicates
+
 

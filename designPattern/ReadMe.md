@@ -16,7 +16,6 @@
 6. 单例模式（Singleton）
 
 builder 生成器模式
-facade  门面模式
 
 # structural Patterns 结构性模式
 1. 外观模式（Facade）

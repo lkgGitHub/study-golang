@@ -1,4 +1,4 @@
-package 命令模式
+package command
 
 /*
  Command 命令模式：

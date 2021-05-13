@@ -1,4 +1,4 @@
-package 职责链模式
+package chainOfResponsibility
 
 import "fmt"
 
