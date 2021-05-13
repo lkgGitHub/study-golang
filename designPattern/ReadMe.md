@@ -15,6 +15,9 @@
 5. 原型模式（Prototype）
 6. 单例模式（Singleton）
 
+builder 生成器模式
+facade  门面模式
+
 # structural Patterns 结构性模式
 1. 外观模式（Facade）
 2. 适配器模式（Adapter）
