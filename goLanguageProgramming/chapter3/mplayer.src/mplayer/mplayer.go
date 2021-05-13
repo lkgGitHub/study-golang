@@ -1,37 +1,39 @@
 package main
 
 import (
+	"bufio"
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+
 	"../smp/mlib"
 	"../smp/mp"
-	"fmt"
-	"strconv"
-	"bufio"
-	"os"
-	"strings"
 )
 
 var lib *mlib.MusicManager
 var id int = 1
+
 //var ctr1, signal chan int
 
 func handleLibCommands(tokens []string) {
 	switch tokens[1] {
 	case "list":
-		for i := 0; i<lib.Len(); i++ {
+		for i := 0; i < lib.Len(); i++ {
 			e, _ := lib.Get(i)
 			fmt.Println(i+1, ":", e.Name, e.Artist, e.Source, e.Type)
 		}
 	case "add":
 		if len(tokens) == 6 {
-			id ++
+			id++
 			lib.Add(&mlib.MusicEntry{strconv.Itoa(id), tokens[2], tokens[3], tokens[4], tokens[5]})
-		}else {
+		} else {
 			fmt.Println("USAGE: lib add <name> <artist> <source> <type>")
 		}
 	case "remove":
-		if len(tokens) ==3{
+		if len(tokens) == 3 {
 			lib.RemoveByName(tokens[2])
-		}else {
+		} else {
 			fmt.Println("USAGE: lib remove <name>")
 		}
 	default:
@@ -46,7 +48,7 @@ func handlePlayCommand(tokens []string) {
 	}
 
 	e := lib.Find(tokens[1])
-	if e == nil{
+	if e == nil {
 		fmt.Println("The music", tokens[1], "does not exist.")
 		return
 	}
@@ -66,9 +68,9 @@ play <name> -- Play the specified music
 	lib = mlib.NewMusicManager()
 	r := bufio.NewReader(os.Stdin)
 
-	for{
+	for {
 		fmt.Print("Enter command-> ")
-		rawLine,_,_ := r.ReadLine()
+		rawLine, _, _ := r.ReadLine()
 
 		line := string(rawLine)
 
