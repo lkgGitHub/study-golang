@@ -1,7 +1,5 @@
 package ipc
 
-import "runtime"
-
 type Request struct {
 	Method string `json:"method"`
 	Params string `json:"params"`
@@ -29,7 +27,7 @@ func (server *IpcServer) Connect() chan string {
 	session := make(chan string, 0)
 
 	go func(c chan string) {
-		for  {
+		for {
 			request := <-c
 
 			if request == "CLOASE" {

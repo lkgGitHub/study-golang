@@ -1,12 +1,12 @@
 package mp
 
 import (
-	"time"
 	"fmt"
+	"time"
 )
 
 type WAVPlayer struct {
-	stat int
+	stat     int
 	propress int
 }
 
