@@ -17,7 +17,7 @@ require (
 	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/go-redis/redis v6.14.2+incompatible
 	github.com/go-redis/redis/v8 v8.8.2
-	github.com/go-sql-driver/mysql v1.5.0
+	github.com/go-sql-driver/mysql v1.6.0
 	github.com/go-zookeeper/zk v1.0.2
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/google/btree v1.0.1 // indirect
@@ -31,7 +31,6 @@ require (
 	github.com/tealeg/xlsx v1.0.5
 	github.com/tmc/grpc-websocket-proxy v0.0.0-20201229170055-e5319fda7802 // indirect
 	github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2 // indirect
-	github.com/xxjwxc/public v0.0.0-20210630115218-586987488289 // indirect
 	go.etcd.io/etcd v3.3.25+incompatible
 	go.uber.org/zap v1.16.0 // indirect
 	golang.org/x/net v0.0.0-20210415231046-e915ea6b2b7d
@@ -39,7 +38,8 @@ require (
 	google.golang.org/grpc v1.37.1 // indirect
 	gopl.io v0.0.0-20200323155855-65c318dde95e
 	gorm.io/datatypes v1.0.1
-	gorm.io/gorm v1.21.6
+	gorm.io/driver/mysql v1.1.1 // indirect
+	gorm.io/gorm v1.21.9
 	sigs.k8s.io/yaml v1.2.0 // indirect
 	xorm.io/xorm v1.0.5
 )

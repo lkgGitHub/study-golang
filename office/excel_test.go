@@ -2,17 +2,49 @@ package office
 
 import (
 	"fmt"
-	"testing"
-
 	"github.com/360EntSecGroup-Skylar/excelize/v2"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
+	"gorm.io/gorm/schema"
+	"strings"
+	"study-goland/office/model"
+	"testing"
 )
+/*
+47.104.4.159:
+用户名：dev
+密码：recruitment_dev@mbz.20@!
+ */
+
+
+func InitDB() *gorm.DB {
+	host := "47.104.4.159"
+	port := 3389
+	username:="dev"
+	password:=`recruitment_dev@mbz.20@!`
+	dbName := "recruitment_dev"
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		username, password, host, port, dbName)
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+		NamingStrategy: schema.NamingStrategy{
+			SingularTable: true, // 使用单数表名，启用该选项，此时，`User` 的表名应该是 `t_user`
+		},
+		Logger: logger.Default.LogMode(logger.Info), // info 打印sql日志
+	})
+	if err != nil {
+		panic(err.Error())
+	}
+	return  db
+}
 
 func TestRead(t *testing.T) {
-	//filename := `C:\mbz\市场部提供材料\企业信息.xlsx`
-	filename := `/Users/lkg/mbz/企业信息.xlsx`
+	db := InitDB()
+	filename := `C:\mbz\市场部提供材料\企业信息.xlsx`
+	//filename := `/Users/lkg/mbz/企业信息.xlsx`
 	f, err := excelize.OpenFile(filename)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("excelize.OpenFile error:"+err.Error())
 		return
 	}
 	// Get value from cell by given worksheet name and axis.
@@ -32,10 +64,61 @@ func TestRead(t *testing.T) {
 		if i == 0 {
 			continue
 		}
-		for _, colCell := range row {
-			fmt.Print(colCell, "\t")
+
+		company := &model.CompanyInfo{
+			BusinessLicense: "营业执照",
+			LinkTel: "1111111",
+			CompanyFullName: row[1],
+			CompanyAbbreviation: row[2],
+			CompanyProfession: row[3],
+			FinanceSituation: row[4],
+			//Address: row[5],
+			StaffSize: row[6],
+			CompanyIntroduction: row[7],
+			IsStress: row[9],
+			SocialInsuranceType: row[10],
+			AccumulationFundPercent: row[11],
+			OtherBenefits: row[12],
+			CommissionRule: row[14],
+			//CreateTime: time.Now(),
+			//CreateUser: "admin",
+			//UpdateTime: time.Now(),
+			//UpdateUser: "admin",
 		}
-		fmt.Println()
+		if address := strings.Split(row[5], "-"); len(address) > 0{
+			company.Province = address[0]
+			if len(address) > 1 {
+				company.City = address[1]
+			}
+
+			if len(address) > 2 {
+				company.District = address[2]
+			}
+
+			if len(address) > 3 {
+				company.Street = address[3]
+			}
+		}
+
+		//layout := "15-04"
+		//workTime := strings.Split(row[8], "-")
+		//workStartTime, err := time.Parse(layout, workTime[0])
+		//if err != nil {
+		//
+		//}
+		//workEndTime , err := time.Parse(layout, workTime[1])
+		//company.WorkStartTime = workStartTime
+		//company.WorkEndTime = workEndTime
+		result := db.Create(company)
+		if result.Error != nil {
+			println("db.Create(company) error:"+result.Error.Error())
+		}
+
+
+		//for _, colCell := range row {
+		//	fmt.Print(colCell, "\t")
+		//}
+		//fmt.Println()
 	}
 
 }

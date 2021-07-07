@@ -361,8 +361,8 @@ func (obj *_SysOpLogMgr) GetFromResult(result string) (results []*SysOpLog, err 
 }
 
 // GetBatchFromResult 批量唯一主键查找 返回结果
-func (obj *_SysOpLogMgr) GetBatchFromResult(results []string) (results []*SysOpLog, err error) {
-	err = obj.DB.WithContext(obj.ctx).Table(obj.GetTableName()).Where("result IN (?)", results).Find(&results).Error
+func (obj *_SysOpLogMgr) GetBatchFromResult(r []string) (results []*SysOpLog, err error) {
+	err = obj.DB.WithContext(obj.ctx).Table(obj.GetTableName()).Where("result IN (?)", r).Find(&results).Error
 
 	return
 }

@@ -42,8 +42,8 @@ type CompanyInfo struct {
 	BusinessLicense         string    `gorm:"column:business_license;type:varchar(100);not null"`            // 营业执照
 	PublicityPictures       string    `gorm:"column:publicity_pictures;type:varchar(100)"`                   // 宣传图片
 	PublicityVideo          string    `gorm:"column:publicity_video;type:varchar(100)"`                      // 宣传视频
-	WorkStartTime           time.Time `gorm:"column:work_start_time;type:timestamp"`                         // 工作开始时间
-	WorkEndTime             time.Time `gorm:"column:work_end_time;type:timestamp"`                           // 工作结束时间
+	//WorkStartTime           time.Time `gorm:"column:work_start_time;type:timestamp"`                         // 工作开始时间
+	//WorkEndTime             time.Time `gorm:"column:work_end_time;type:timestamp"`                           // 工作结束时间
 	IsStress                string    `gorm:"column:is_stress;type:varchar(2)"`                              // 是否弹性(1:弹性 0：非弹性)
 	SocialInsuranceType     string    `gorm:"column:social_insurance_type;type:varchar(2)"`                  // 社保类型（五险一金，六险一金）
 	AccumulationFundPercent string    `gorm:"column:accumulation_fund_Percent;type:varchar(4);default:12"`   // 公积金比例默认12
@@ -59,11 +59,11 @@ type CompanyInfo struct {
 	Agreement               string    `gorm:"column:agreement;type:varchar(100)"`                            // 合同样本
 	Source                  string    `gorm:"column:source;type:varchar(100);default:12"`                    // 来源(线上，线下)
 	State                   string    `gorm:"column:state;type:varchar(100);not null;default:12"`            // 公司状态(默认是1，无效:0)
-	CheckTime               time.Time `gorm:"column:check_time;type:timestamp"`                              // 审核时间
-	ApplyTime               time.Time `gorm:"column:apply_time;type:timestamp"`                              // 申请时间
-	CreateTime              time.Time `gorm:"column:create_time;type:timestamp;not null"`                    // 录入时间
+	//CheckTime               time.Time `gorm:"column:check_time;type:timestamp"`                              // 审核时间
+	//ApplyTime               time.Time `gorm:"column:apply_time;type:timestamp"`                              // 申请时间
+	//CreateTime              time.Time `gorm:"column:create_time;type:timestamp;not null"`                    // 录入时间
 	CreateUser              string    `gorm:"column:create_user;type:varchar(100);not null"`                 // 录入人
-	UpdateTime              time.Time `gorm:"column:update_time;type:timestamp"`                             // 更新时间
+	//UpdateTime              time.Time `gorm:"column:update_time;type:timestamp"`                             // 更新时间
 	UpdateUser              string    `gorm:"column:update_user;type:varchar(100)"`                          // 更新人
 }
 
