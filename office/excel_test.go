@@ -8,7 +8,8 @@ import (
 )
 
 func TestRead(t *testing.T) {
-	filename := `C:\mbz\市场部提供材料\企业信息.xlsx`
+	//filename := `C:\mbz\市场部提供材料\企业信息.xlsx`
+	filename := `/Users/lkg/mbz/企业信息.xlsx`
 	f, err := excelize.OpenFile(filename)
 	if err != nil {
 		fmt.Println(err)
@@ -39,7 +40,6 @@ func TestRead(t *testing.T) {
 
 }
 
-
 func TestWrite(t *testing.T) {
 	f := excelize.NewFile()
 	// Create a new sheet.
@@ -54,7 +54,3 @@ func TestWrite(t *testing.T) {
 		fmt.Println(err)
 	}
 }
-
-
-
-
