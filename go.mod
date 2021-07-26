@@ -38,7 +38,7 @@ require (
 	google.golang.org/grpc v1.37.1 // indirect
 	gopl.io v0.0.0-20200323155855-65c318dde95e
 	gorm.io/datatypes v1.0.1
-	gorm.io/driver/mysql v1.1.1 // indirect
+	gorm.io/driver/mysql v1.1.1
 	gorm.io/gorm v1.21.9
 	sigs.k8s.io/yaml v1.2.0 // indirect
 	xorm.io/xorm v1.0.5
