@@ -27,15 +27,15 @@ require (
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0 // indirect
 	github.com/jonboulle/clockwork v0.2.2 // indirect
-	github.com/pkg/profile v1.6.0
 	github.com/soheilhy/cmux v0.1.5 // indirect
 	github.com/tealeg/xlsx v1.0.5
 	github.com/tmc/grpc-websocket-proxy v0.0.0-20201229170055-e5319fda7802 // indirect
 	github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2 // indirect
 	go.etcd.io/etcd v3.3.25+incompatible
 	go.uber.org/zap v1.16.0 // indirect
-	golang.org/x/net v0.0.0-20210415231046-e915ea6b2b7d
+	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d
 	golang.org/x/time v0.0.0-20210611083556-38a9dc6acbc6 // indirect
+	golang.org/x/tools v0.1.6 // indirect
 	google.golang.org/grpc v1.37.1 // indirect
 	gopl.io v0.0.0-20200323155855-65c318dde95e
 	gorm.io/datatypes v1.0.1
