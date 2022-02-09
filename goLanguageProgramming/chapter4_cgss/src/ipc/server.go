@@ -35,5 +35,6 @@ func (server *IpcServer) Connect() chan string {
 			}
 		}
 
-	}()
+	}(session)
+	return session
 }
