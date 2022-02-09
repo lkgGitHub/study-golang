@@ -1,0 +1,9 @@
+kind: reverse
+name: mydb
+source:
+  database: mysql
+  conn_str: 'host=127.0.0.1 port=3306 user=mysql password=mysql database=mysql'
+targets:
+- type: codes
+  language: golang
+  output_dir: ./
