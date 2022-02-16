@@ -30,5 +30,5 @@ func Test_threeSum(t *testing.T) {
 
 func threeSum(nums []int) [][]int {
 
-	return [][]int{}
+	return nil
 }
