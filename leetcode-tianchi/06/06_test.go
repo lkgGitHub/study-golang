@@ -1,4 +1,4 @@
-package leetcode_tianchi
+package _6
 
 import (
 	"fmt"
