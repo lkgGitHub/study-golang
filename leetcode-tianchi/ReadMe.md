@@ -2,6 +2,8 @@
 
 # 06 位运算
 
-# 07 双指针
+# 07 double pointer 双指针
 
-# 08 搜索
+# 08 search 搜索
+
+# 09 sort 排序 
