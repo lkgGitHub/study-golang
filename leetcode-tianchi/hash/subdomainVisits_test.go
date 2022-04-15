@@ -70,6 +70,7 @@ func TestSubdomainVisits(t *testing.T) {
 	}
 }
 
+// subdomainVisits 哈希映射法
 func subdomainVisits(cpdomains []string) []string {
 	domainMap := make(map[string]int, len(cpdomains)*2)
 	for _, domain := range cpdomains {
