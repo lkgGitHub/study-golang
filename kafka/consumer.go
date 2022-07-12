@@ -12,9 +12,9 @@ import (
 )
 
 const (
-	Broken = "10.0.6.5:9092" // 测试环境
-	Topic  = "alarm-res"
-	groupID = "godeye"
+	Broken  = "127.0.0.1:9092" // 测试环境
+	Topic   = "topic"
+	groupID = "groupID"
 )
 
 func main() {
