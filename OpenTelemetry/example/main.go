@@ -2,17 +2,16 @@ package main
 
 import (
 	"context"
-	"io"
-	"log"
-	"os"
-	"os/signal"
-
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
 	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.12.0"
+	"io"
+	"log"
+	"os"
+	"os/signal"
 )
 
 // newExporter returns a console exporter.
@@ -60,7 +59,7 @@ func main() {
 		trace.WithResource(newResource()),
 	)
 	defer func() {
-		if err := tp.Shutdown(context.Background()); err != nil {
+		if err = tp.Shutdown(context.Background()); err != nil {
 			l.Fatal(err)
 		}
 	}()
@@ -79,7 +78,7 @@ func main() {
 	case <-sigCh:
 		l.Println("\ngoodbye")
 		return
-	case err := <-errCh:
+	case err = <-errCh:
 		if err != nil {
 			l.Fatal(err)
 		}
