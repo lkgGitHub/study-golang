@@ -18,7 +18,7 @@ import (
 func newExporter(w io.Writer) (trace.SpanExporter, error) {
 	return stdouttrace.New(
 		stdouttrace.WithWriter(w),
-		// Use human readable output.
+		// Use human-readable output.
 		stdouttrace.WithPrettyPrint(),
 		// Do not print timestamps for the demo.
 		stdouttrace.WithoutTimestamps(),
@@ -26,6 +26,7 @@ func newExporter(w io.Writer) (trace.SpanExporter, error) {
 }
 
 // newResource returns a resource describing this application.
+// newResource 返回描述此应用程序的 resource
 func newResource() *resource.Resource {
 	r, _ := resource.Merge(
 		resource.Default(),

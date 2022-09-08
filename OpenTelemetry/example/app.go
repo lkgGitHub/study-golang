@@ -45,6 +45,7 @@ func (a *App) Run(ctx context.Context) error {
 }
 
 // Poll asks a user for input and returns the request.
+// 轮询 请求用户输入并返回请求。
 func (a *App) Poll(ctx context.Context) (uint, error) {
 	_, span := otel.Tracer(name).Start(ctx, "Poll")
 	defer span.End()
@@ -67,6 +68,7 @@ func (a *App) Poll(ctx context.Context) (uint, error) {
 }
 
 // Write writes the n-th Fibonacci number back to the user.
+// 将第 n 个斐波那契数返回给用户。
 func (a *App) Write(ctx context.Context, n uint) {
 	var span trace.Span
 	ctx, span = otel.Tracer(name).Start(ctx, "Write")
