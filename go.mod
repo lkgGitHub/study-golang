@@ -13,6 +13,8 @@ require (
 	github.com/go-redis/redis/v8 v8.8.2
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/go-zookeeper/zk v1.0.2
+	github.com/google/uuid v1.2.0
+	github.com/pkg/profile v1.6.0
 	github.com/sony/sonyflake v1.0.0
 	go.etcd.io/etcd v3.3.25+incompatible
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.34.0
@@ -53,7 +55,6 @@ require (
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/google/btree v1.0.1 // indirect
-	github.com/google/uuid v1.2.0 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0 // indirect
