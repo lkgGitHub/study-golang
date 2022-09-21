@@ -1,4 +1,4 @@
-package main
+package etcd
 
 import (
 	"context"
@@ -7,25 +7,31 @@ import (
 	"testing"
 	"time"
 
-	"google.golang.org/grpc"
-
 	"go.etcd.io/etcd/api/v3/v3rpc/rpctypes"
-
 	clientv3 "go.etcd.io/etcd/client/v3"
+	"google.golang.org/grpc"
 )
 
-func TestEtcd(t *testing.T) {
+func TestPutAndGet(t *testing.T) {
 	cli, err := clientv3.New(clientv3.Config{
-		Endpoints:   []string{"127.0.0.1:2379"},
+		Endpoints:   []string{"127.0.0.1:2378"},
 		DialTimeout: 5 * time.Second,
 	})
-	if err != nil { // handle error!
-		fmt.Printf("connect to etcd failed, err:%v\n", err)
-		return
+	if err != nil {
+		switch err {
+		case context.DeadlineExceeded:
+			// etcd clientv3 >= v3.2.10, grpc/grpc-go >= v1.7.3
+		case grpc.ErrClientConnTimeout:
+			// etcd clientv3 <= v3.2.9, grpc/grpc-go <= v1.2.1
+		default:
+			// handle error!
+		}
+		t.Error(err.Error())
 	}
+
 	go func() { cli.Close() }()
 	// 获取上下文，设置请求超时时间为5秒
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	resp, err := cli.Put(ctx, "sample_key", "sample_value")
 	cancel()
 	if err != nil {
@@ -55,25 +61,4 @@ func TestEtcd(t *testing.T) {
 			// gRPC client connection is closed
 		}
 	}
-
-	//m, err := etcdsync.New("/lock", 10, []string{"http://127.0.0.1:2379"})
-	//if m == nil || err != nil {
-	//	log.Printf("etcdsync.New failed")
-	//	return
-	//}
-	//err = m.Lock()
-	//if err != nil {
-	//	log.Printf("etcdsync.Lock failed")
-	//	return
-	//}
-	//
-	//log.Printf("etcdsync.Lock OK")
-	//log.Printf("Get the lock. Do something here.")
-	//
-	//err = m.Unlock()
-	//if err != nil {
-	//	log.Printf("etcdsync.Unlock failed")
-	//} else {
-	//	log.Printf("etcdsync.Unlock OK")
-	//}
 }
