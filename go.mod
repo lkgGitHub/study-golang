@@ -13,9 +13,8 @@ require (
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/go-zookeeper/zk v1.0.2
-	github.com/google/uuid v1.2.0
-	github.com/pkg/profile v1.6.0
 	github.com/sony/sonyflake v1.0.0
+	go.etcd.io/etcd/api/v3 v3.5.5
 	go.etcd.io/etcd/client/v3 v3.5.5
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.34.0
 	go.opentelemetry.io/otel v1.10.0
@@ -24,6 +23,7 @@ require (
 	go.opentelemetry.io/otel/sdk/metric v0.31.0
 	go.uber.org/ratelimit v0.2.0
 	golang.org/x/net v0.0.0-20220809184613-07c6da5e1ced
+	google.golang.org/grpc v1.41.0
 	gopl.io v0.0.0-20200323155855-65c318dde95e
 	gorm.io/datatypes v1.0.1
 	gorm.io/driver/mysql v1.1.1
@@ -73,7 +73,6 @@ require (
 	github.com/shiena/ansicolor v0.0.0-20151119151921-a422bbe96644 // indirect
 	github.com/syndtr/goleveldb v1.0.0 // indirect
 	github.com/xuri/efp v0.0.0-20210322160811-ab561f5b45e3 // indirect
-	go.etcd.io/etcd/api/v3 v3.5.5 // indirect
 	go.etcd.io/etcd/client/pkg/v3 v3.5.5 // indirect
 	go.opentelemetry.io/otel/sdk v1.8.0 // indirect
 	go.opentelemetry.io/otel/trace v1.10.0 // indirect
@@ -82,9 +81,8 @@ require (
 	go.uber.org/zap v1.17.0 // indirect
 	golang.org/x/crypto v0.0.0-20220722155217-630584e8d5aa // indirect
 	golang.org/x/sys v0.0.0-20220728004956-3c1f35247d10 // indirect
-	golang.org/x/text v0.3.7 // indirect
+	golang.org/x/text v0.3.8 // indirect
 	google.golang.org/genproto v0.0.0-20210602131652-f16073e35f0c // indirect
-	google.golang.org/grpc v1.41.0 // indirect
 	google.golang.org/protobuf v1.26.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	xorm.io/builder v0.3.7 // indirect
