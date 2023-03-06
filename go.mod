@@ -26,7 +26,7 @@ require (
 	go.opentelemetry.io/otel/metric v0.32.0
 	go.opentelemetry.io/otel/sdk/metric v0.31.0
 	go.uber.org/ratelimit v0.2.0
-	golang.org/x/net v0.7.0
+	golang.org/x/net v0.8.0
 	google.golang.org/grpc v1.41.0
 	gopl.io v0.0.0-20200323155855-65c318dde95e
 	gorm.io/datatypes v1.0.1
@@ -97,8 +97,8 @@ require (
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.17.0 // indirect
 	golang.org/x/crypto v0.6.0 // indirect
-	golang.org/x/sys v0.5.0 // indirect
-	golang.org/x/text v0.7.0 // indirect
+	golang.org/x/sys v0.6.0 // indirect
+	golang.org/x/text v0.8.0 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/genproto v0.0.0-20210602131652-f16073e35f0c // indirect
 	google.golang.org/protobuf v1.26.0 // indirect
@@ -108,7 +108,8 @@ require (
 )
 
 //github.com/coreos/bbolt v1.3.6 => go.etcd.io/bbolt v1.3.6
-replace google.golang.org/grpc v1.37.1 => google.golang.org/grpc v1.26.0
+//replace google.golang.org/grpc v1.37.1 => google.golang.org/grpc v1.26.0
+replace google.golang.org/grpc => google.golang.org/grpc v1.29.0
 
 //module declares its path as: go.etcd.io/bbolt
 //but was required as: github.com/coreos/bbolt
