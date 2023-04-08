@@ -9,11 +9,12 @@ require (
 	github.com/bmizerany/pat v0.0.0-20170815010413-6226ea591a40
 	github.com/bmizerany/pq v0.0.0-20131128184720-da2b95e392c1
 	github.com/bwmarrin/snowflake v0.3.0
+	github.com/fzambia/sentinel v1.1.1
 	github.com/go-redis/redis v6.14.2+incompatible
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/go-zookeeper/zk v1.0.2
-	github.com/google/uuid v1.3.0
+	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/jarcoal/httpmock v1.3.0
 	github.com/redis/go-redis/v9 v9.0.2
 	github.com/sony/sonyflake v1.0.0
