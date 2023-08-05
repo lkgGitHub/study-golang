@@ -3,7 +3,7 @@ package saramaKafka
 import (
 	"log"
 
-	"github.com/Shopify/sarama"
+	"github.com/IBM/sarama"
 )
 
 func SyncProducer() {

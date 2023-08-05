@@ -3,7 +3,7 @@ package saramaKafka
 import (
 	"context"
 	"fmt"
-	"github.com/Shopify/sarama"
+	"github.com/IBM/sarama"
 )
 
 type ConsumerGroupHandler struct{}

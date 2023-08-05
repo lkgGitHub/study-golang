@@ -2,7 +2,7 @@ package saramaKafka
 
 import (
 	"fmt"
-	"github.com/Shopify/sarama"
+	"github.com/IBM/sarama"
 	"log"
 	"os"
 	"os/signal"
