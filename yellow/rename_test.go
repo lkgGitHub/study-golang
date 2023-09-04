@@ -40,13 +40,12 @@ func getNewName(name string) (string, bool) {
 		return name, false
 	}
 
-	for i := len(name)/3 - 5; i < len(name)/3; i++ {
-		prefix := name[0:6]
-		nameTmp := strings.TrimPrefix(name, prefix)
-		index := strings.Index(nameTmp, prefix)
-		if index > 0 {
-			return name[0 : index+5], true
-		}
+	prefix := name[0:6]
+	nameTmp := strings.TrimPrefix(name, prefix)
+	index := strings.Index(nameTmp, prefix)
+	if index > 0 {
+		return name[0 : index+5], true
 	}
+
 	return name, false
 }
