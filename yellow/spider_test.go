@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-const baseURL = "http://687hsck.cc"
+const baseURL = ""
 
 func TestGoQuery(t *testing.T) {
 	db := InitPG()

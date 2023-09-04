@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-const baseDir = "/Volumes/SamSung/picture"
+const baseDir = ""
 
 func TestDownloadPicture(t *testing.T) {
 	start := time.Now()
