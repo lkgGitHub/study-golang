@@ -11,7 +11,7 @@ import (
 
 type Video struct {
 	ID       int       `gorm:"id"`
-	Name     string    `gorm:"name"`
+	Name     string    `gorm:"name,uniqueIndex"`
 	URL      string    `gorm:"url"`
 	Picture  string    `gorm:"picture"`
 	Duration string    `gorm:"duration"` // 时长
