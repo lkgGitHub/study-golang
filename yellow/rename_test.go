@@ -12,10 +12,8 @@ import (
 const reNameDir = ""
 
 func TestRename(t *testing.T) {
-	listFiles(reNameDir)
-}
+	dirname := reNameDir
 
-func listFiles(dirname string) {
 	fileInfos, err := os.ReadDir(dirname)
 	if err != nil {
 		log.Fatal(err)
