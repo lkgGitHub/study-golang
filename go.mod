@@ -27,6 +27,7 @@ require (
 	go.opentelemetry.io/otel v1.16.0
 	go.uber.org/ratelimit v0.3.0
 	golang.org/x/net v0.14.0
+	golang.org/x/time v0.0.0-20191024005414-555d28b269f0
 	google.golang.org/grpc v1.57.0
 	gopl.io v0.0.0-20211004154805-1ae3ec64947b
 	gorm.io/datatypes v1.2.0
