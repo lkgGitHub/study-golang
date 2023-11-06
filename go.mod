@@ -17,7 +17,6 @@ require (
 	github.com/gocolly/colly v1.2.0
 	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/jarcoal/httpmock v1.3.0
-	github.com/pkg/profile v1.2.1
 	github.com/redis/go-redis/v9 v9.0.5
 	github.com/sony/sonyflake v1.1.0
 	github.com/stretchr/testify v1.8.4
