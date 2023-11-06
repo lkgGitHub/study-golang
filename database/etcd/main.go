@@ -5,11 +5,12 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	clientv3 "go.etcd.io/etcd/client/v3"
 	"time"
+
+	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
-var etcdEndpoint = "192.168.2.242:22379"
+var etcdEndpoint = "127.0.0.1:2379"
 
 func main() {
 	flag.StringVar(&etcdEndpoint, "etcd", etcdEndpoint, "etcd endpoint")
@@ -24,18 +25,17 @@ func main() {
 		return
 	}
 
-	go func() { _ = cli.Close() }()
+	defer func() { _ = cli.Close() }()
 
-	// 获取上下文，设置请求超时时间为5秒
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
-	defer cancel()
 	tick := time.NewTicker(time.Second)
 
-	for {
+	for i := 0; ; i++ {
+		fmt.Println(i, "date: ", time.Now().Format(time.DateTime))
+		// 获取上下文，设置请求超时时间为5秒
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 		putResponse, err := cli.Put(ctx, "sample_key", "sample_value")
 		if err != nil {
 			fmt.Println(err.Error())
-			return
 		}
 		fmt.Println("putResponse:", putResponse)
 
@@ -44,6 +44,8 @@ func main() {
 			fmt.Println(err.Error())
 		}
 		fmt.Println("getResponse:", getResponse)
+		cancel()
+		println()
 		<-tick.C
 	}
 }

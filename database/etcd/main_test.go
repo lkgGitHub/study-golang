@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"testing"
 	"time"
 
@@ -18,18 +19,19 @@ func TestPutAndGet(t *testing.T) {
 		return
 	}
 
-	go func() { _ = cli.Close() }()
+	defer func() { _ = cli.Close() }()
 
 	// 获取上下文，设置请求超时时间为5秒
-	//ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
-	//resp, err := cli.Put(context.Background(), "sample_key", "sample_value")
-	////cancel()
-	//if err != nil {
-	//	t.Error(err.Error())
-	//	return
-	//}
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+	resp, err := cli.Put(ctx, "sample_key", "sample_value")
 
-	//fmt.Println(resp)
+	if err != nil {
+		t.Error(err.Error())
+		return
+	}
+
+	fmt.Println(resp)
 	_, err = cli.Get(context.Background(), "sample_key")
 	if err != nil {
 		t.Error(err.Error())
