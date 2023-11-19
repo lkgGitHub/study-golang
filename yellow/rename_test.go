@@ -22,9 +22,17 @@ func TestRename(t *testing.T) {
 		if !strings.HasSuffix(fi.Name(), ".mp4") {
 			continue
 		}
-		newName, ok := getNewName(fi.Name())
-		if ok {
+		if newName, ok := deleteRepetitionCharacter(fi.Name()); ok {
+			fmt.Println(fi.Name(), "->", newName)
 			err = os.Rename(path.Join(dirname, fi.Name()), path.Join(dirname, newName+".mp4"))
+			if err != nil {
+				fmt.Println(err.Error())
+				continue
+			}
+		}
+		if newName, ok := deleteInvalid(fi.Name()); ok {
+			fmt.Println(fi.Name(), "->", newName)
+			err = os.Rename(path.Join(dirname, fi.Name()), path.Join(dirname, newName))
 			if err != nil {
 				fmt.Println(err.Error())
 				continue
@@ -33,7 +41,7 @@ func TestRename(t *testing.T) {
 	}
 }
 
-func getNewName(name string) (string, bool) {
+func deleteRepetitionCharacter(name string) (string, bool) {
 	if len(name) < 6 {
 		return name, false
 	}
@@ -46,4 +54,34 @@ func getNewName(name string) (string, bool) {
 	}
 
 	return name, false
+}
+
+func deleteInvalid(name string) (string, bool) {
+	rename := false
+
+	if strings.Contains(name, ".mp4.mp4") {
+		name = strings.ReplaceAll(name, ".mp4.mp4", ".mp4")
+		rename = true
+	}
+
+	for _, str := range deleteStrSlice {
+		if strings.Contains(name, str) {
+			name = strings.ReplaceAll(name, str, "")
+			rename = true
+		}
+	}
+
+	for _, substr := range deleteSuffixSlice {
+		if index := strings.Index(name, substr); index > 0 {
+			nameSlice := strings.Split(name, ".")
+			suffix := nameSlice[len(nameSlice)-1]
+			name = name[:index]
+			name = strings.TrimSpace(name)
+			name = strings.TrimSuffix(name, "-")
+			name = name + "." + suffix
+			rename = true
+		}
+	}
+
+	return name, rename
 }
