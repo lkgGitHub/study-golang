@@ -19,7 +19,7 @@ func TestRename(t *testing.T) {
 		log.Fatal(err)
 	}
 	for _, fi := range fileInfos {
-		if !strings.HasSuffix(fi.Name(), ".mp4") {
+		if !strings.HasSuffix(strings.ToLower(fi.Name()), ".mp4") {
 			continue
 		}
 		if newName, ok := deleteRepetitionCharacter(fi.Name()); ok {
@@ -61,6 +61,11 @@ func deleteInvalid(name string) (string, bool) {
 
 	if strings.Contains(name, ".mp4.mp4") {
 		name = strings.ReplaceAll(name, ".mp4.mp4", ".mp4")
+		rename = true
+	}
+
+	if strings.Contains(name, "-.mp4") {
+		name = strings.ReplaceAll(name, "-.mp4", ".mp4")
 		rename = true
 	}
 
