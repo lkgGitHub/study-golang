@@ -11,6 +11,30 @@ import (
 
 const reNameDir = ""
 
+func TestPrefix(t *testing.T) {
+	dirname := reNameDir
+	fileInfos, err := os.ReadDir(reNameDir)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, fi := range fileInfos {
+		if !strings.HasSuffix(strings.ToLower(fi.Name()), ".mp4") {
+			continue
+		}
+		if strings.Contains(fi.Name(), prefix) && !strings.HasPrefix(fi.Name(), prefix) {
+			newName := strings.Replace(fi.Name(), prefix, "", 1)
+			newName, _ = deleteInvalid(fi.Name())
+			err = os.Rename(path.Join(dirname, fi.Name()), path.Join(dirname, prefix+"-"+newName))
+			if err != nil {
+				fmt.Println(err.Error())
+				continue
+			} else {
+				fmt.Println(fi.Name(), "->", prefix+"-"+fi.Name())
+			}
+		}
+	}
+}
+
 func TestRename(t *testing.T) {
 	dirname := reNameDir
 
@@ -42,15 +66,15 @@ func TestRename(t *testing.T) {
 }
 
 func deleteRepetitionCharacter(name string) (string, bool) {
-	if len(name) < 6 {
+	if len(name) < 9 {
 		return name, false
 	}
 
-	prefix := name[0:6]
+	prefix := name[0:9]
 	nameTmp := strings.TrimPrefix(name, prefix)
 	index := strings.Index(nameTmp, prefix)
 	if index > 0 {
-		return name[0 : index+5], true
+		return name[0 : index+9], true
 	}
 
 	return name, false
@@ -61,11 +85,6 @@ func deleteInvalid(name string) (string, bool) {
 
 	if strings.Contains(name, ".mp4.mp4") {
 		name = strings.ReplaceAll(name, ".mp4.mp4", ".mp4")
-		rename = true
-	}
-
-	if strings.Contains(name, "-.mp4") {
-		name = strings.ReplaceAll(name, "-.mp4", ".mp4")
 		rename = true
 	}
 
@@ -86,6 +105,11 @@ func deleteInvalid(name string) (string, bool) {
 			name = name + "." + suffix
 			rename = true
 		}
+	}
+
+	if strings.Contains(name, "-.mp4") {
+		name = strings.ReplaceAll(name, "-.mp4", ".mp4")
+		rename = true
 	}
 
 	return name, rename
