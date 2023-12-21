@@ -22,14 +22,14 @@ func TestPrefix(t *testing.T) {
 			continue
 		}
 		if strings.Contains(fi.Name(), prefix) && !strings.HasPrefix(fi.Name(), prefix) {
-			newName := strings.Replace(fi.Name(), prefix, "", 1)
-			newName, _ = deleteInvalid(fi.Name())
+			newName := strings.Replace(fi.Name(), prefix, "", -1)
+			newName, _ = deleteInvalid(newName)
 			err = os.Rename(path.Join(dirname, fi.Name()), path.Join(dirname, prefix+"-"+newName))
 			if err != nil {
 				fmt.Println(err.Error())
 				continue
 			} else {
-				fmt.Println(fi.Name(), "->", prefix+"-"+fi.Name())
+				fmt.Println(fi.Name(), "->", prefix+"-"+newName)
 			}
 		}
 	}
