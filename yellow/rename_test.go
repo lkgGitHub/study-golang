@@ -38,28 +38,30 @@ func TestPrefix(t *testing.T) {
 func TestRename(t *testing.T) {
 	dirname := reNameDir
 
-	fileInfos, err := os.ReadDir(dirname)
-	if err != nil {
-		log.Fatal(err)
-	}
-	for _, fi := range fileInfos {
-		if !strings.HasSuffix(strings.ToLower(fi.Name()), ".mp4") {
-			continue
+	for i := 0; i < 2; i++ {
+		fileInfos, err := os.ReadDir(dirname)
+		if err != nil {
+			log.Fatal(err)
 		}
-		if newName, ok := deleteRepetitionCharacter(fi.Name()); ok {
-			fmt.Println(fi.Name(), "->", newName)
-			err = os.Rename(path.Join(dirname, fi.Name()), path.Join(dirname, newName+".mp4"))
-			if err != nil {
-				fmt.Println(err.Error())
+		for _, fi := range fileInfos {
+			if !strings.HasSuffix(strings.ToLower(fi.Name()), ".mp4") {
 				continue
 			}
-		}
-		if newName, ok := deleteInvalid(fi.Name()); ok {
-			fmt.Println(fi.Name(), "->", newName)
-			err = os.Rename(path.Join(dirname, fi.Name()), path.Join(dirname, newName))
-			if err != nil {
-				fmt.Println(err.Error())
-				continue
+			if newName, ok := deleteRepetitionCharacter(fi.Name()); ok {
+				fmt.Println(fi.Name(), "->", newName)
+				err = os.Rename(path.Join(dirname, fi.Name()), path.Join(dirname, newName+".mp4"))
+				if err != nil {
+					fmt.Println(err.Error())
+					continue
+				}
+			}
+			if newName, ok := deleteInvalid(fi.Name()); ok {
+				fmt.Println(fi.Name(), "->", newName)
+				err = os.Rename(path.Join(dirname, fi.Name()), path.Join(dirname, newName))
+				if err != nil {
+					fmt.Println(err.Error())
+					continue
+				}
 			}
 		}
 	}
@@ -70,9 +72,9 @@ func deleteRepetitionCharacter(name string) (string, bool) {
 		return name, false
 	}
 
-	prefix := name[0:9]
-	nameTmp := strings.TrimPrefix(name, prefix)
-	index := strings.Index(nameTmp, prefix)
+	p := name[0:9]
+	nameTmp := strings.TrimPrefix(name, p)
+	index := strings.Index(nameTmp, p)
 	if index > 0 {
 		return name[0 : index+9], true
 	}
