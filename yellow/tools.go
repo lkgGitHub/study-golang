@@ -10,14 +10,15 @@ import (
 )
 
 type Video struct {
-	ID       int       `gorm:"id"`
-	Name     string    `gorm:"name,uniqueIndex"`
-	URL      string    `gorm:"url"`
-	Picture  string    `gorm:"picture"`
-	Duration string    `gorm:"duration"` // 时长
-	Heart    int       `gorm:"heart"`
-	Views    int       `gorm:"views"`
-	Publish  time.Time `gorm:"publish"`
+	ID         int       `gorm:"id"`
+	Name       string    `gorm:"name,uniqueIndex"`
+	URL        string    `gorm:"url"`
+	Picture    string    `gorm:"picture"`
+	Duration   string    `gorm:"duration"` // 时长
+	Heart      int       `gorm:"heart"`
+	Views      int       `gorm:"views"`
+	Publish    time.Time `gorm:"publish"`
+	IsDownload bool      `gorm:"is_download"`
 }
 
 func InitPG() *gorm.DB {

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
+	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
 	"log"
 	"net/http"
@@ -16,11 +17,16 @@ import (
 const baseURL = ""
 
 func TestGoQuery(t *testing.T) {
-	db := InitPG()
+	db, err := gorm.Open(sqlite.Open("video.db"), &gorm.Config{})
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	db.AutoMigrate(&Video{})
 
 	for count := 1; count <= 24; count++ {
 	loop:
-		for page := 2; ; page++ {
+		for page := 1; ; page++ {
 			log.Println("count:", count, "page:", page)
 			res, err := http.Get(fmt.Sprintf(baseURL+"/vodtype/%d-%d.html", count, page))
 			if err != nil {
@@ -92,4 +98,34 @@ func TestGoQuery(t *testing.T) {
 			}
 		}
 	}
+}
+
+func TestUpdateIsDownload(t *testing.T) {
+	videoDB, err := gorm.Open(sqlite.Open("video.db"), &gorm.Config{})
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	videoDB.AutoMigrate(&Video{})
+
+	yellowDB, err := gorm.Open(sqlite.Open("yellow.db"), &gorm.Config{})
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	yVideos := make([]*Video, 0, 2000)
+	yellowDB.Model(&Video{}).Find(&yVideos)
+	for i, v := range yVideos {
+		name := strings.TrimSuffix(v.Name, ".mp4")
+		err = videoDB.Model(&Video{}).Where("name=?", name).Update("is_download", true).Error
+		if err != nil {
+			t.Error("update error:", err)
+			continue
+		}
+		if i%10 == 0 {
+			fmt.Println(time.Now().Format("2006-01-02 15:04:05"))
+		}
+	}
+
 }
