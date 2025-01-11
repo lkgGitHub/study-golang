@@ -11,9 +11,6 @@ import (
 	"testing"
 )
 
-const reNameDir = ""
-
-
 func TestRename(t *testing.T) {
 	dirname := reNameDir
 
@@ -52,13 +49,16 @@ func TestCheckName(t *testing.T) {
 		t.Error(err.Error())
 		return
 	}
+
+	// 实际所有文件的 map
 	fileMap := make(map[string]string, len(files))
 	for _, f := range files {
 		n := filepath.Base(f)
 		if v, ok := fileMap[n]; !ok {
 			fileMap[n] = f
 		} else {
-			fmt.Printf("name: %s \n %s\n %s \n", n, v, f)
+			// 重复文件名打印出来
+			fmt.Printf("duplicate name: %s \n %s\n %s \n", n, v, f)
 		}
 	}
 
@@ -66,6 +66,8 @@ func TestCheckName(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
+
+	// 已保存所有文件的 map
 	bodyMap := make(map[string]struct{}, 3000)
 	for _, line := range strings.Split(string(body), "\n") {
 		bodyMap[line] = struct{}{}

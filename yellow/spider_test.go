@@ -14,8 +14,6 @@ import (
 	"time"
 )
 
-const baseURL = ""
-
 func TestGoQuery(t *testing.T) {
 	db, err := gorm.Open(sqlite.Open("video.db"), &gorm.Config{})
 	if err != nil {
