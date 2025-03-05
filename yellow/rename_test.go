@@ -54,6 +54,9 @@ func TestCheckName(t *testing.T) {
 	fileMap := make(map[string]string, len(files))
 	for _, f := range files {
 		n := filepath.Base(f)
+		if !strings.HasSuffix(n, ".mp4") {
+			continue
+		}
 		if v, ok := fileMap[n]; !ok {
 			fileMap[n] = f
 		} else {
@@ -78,6 +81,8 @@ func TestCheckName(t *testing.T) {
 		if _, ok := bodyMap[k]; !ok {
 			content.WriteString(k)
 			content.WriteString("\n")
+		} else {
+			fmt.Printf("duplicate name: %s \n", k)
 		}
 	}
 
