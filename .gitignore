@@ -21,3 +21,4 @@ vendor
 *.xlsx
 *.db
 global.go
+globle.go

@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"testing"
 )
@@ -167,6 +168,13 @@ func deleteInvalid(name string) (string, bool) {
 	for _, str := range deleteStrSlice {
 		if strings.Contains(name, str) {
 			name = strings.ReplaceAll(name, str, "")
+			rename = true
+		}
+	}
+	for _, pattern := range deletePatternSlice {
+		re := regexp.MustCompile(pattern)
+		if re.MatchString(name) {
+			name = re.ReplaceAllString(name, "")
 			rename = true
 		}
 	}
