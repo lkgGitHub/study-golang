@@ -2,11 +2,12 @@ package yellow
 
 import (
 	"fmt"
+	"time"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	gormLogger "gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
-	"time"
 )
 
 type Video struct {
@@ -22,15 +23,13 @@ type Video struct {
 }
 
 func InitPG() *gorm.DB {
-	dsn := fmt.Sprintf(
-		"host=127.0.0.1 port=5432 user=postgres password=123456 dbname=aaa sslmode=disable TimeZone=Asia/Shanghai")
 	gormConfig := &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true, // 使用单数表名，启用该选项，此时，`User` 的表名应该是 `user`
 		},
 		Logger: gormLogger.Default.LogMode(gormLogger.Error), // info 打印sql日志
 	}
-	db, err := gorm.Open(postgres.Open(dsn), gormConfig)
+	db, err := gorm.Open(postgres.Open(postgresDSN), gormConfig)
 	if err != nil {
 		panic(fmt.Sprintf("gorm database engine creation failed: %s", err.Error()))
 	}

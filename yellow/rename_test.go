@@ -128,7 +128,7 @@ func getAllFile(pathname string) ([]string, error) {
 		fullName := pathname + "/" + fi.Name()
 		// 是文件夹则递归进入获取;是文件，则压入数组
 		if fi.IsDir() {
-			temp, err := GetAllFile(fullName)
+			temp, err := getAllFile(fullName)
 			if err != nil {
 				fmt.Printf("读取文件目录失败,fullname=%v, err=%v", fullName, err)
 				return result, err
@@ -218,6 +218,80 @@ func TestPrefix(t *testing.T) {
 				continue
 			} else {
 				fmt.Println(fi.Name(), "->", prefix+"-"+newName)
+			}
+		}
+	}
+}
+
+func TestRemoveFile(t *testing.T) {
+	dirname := reNameDir
+
+	// 读取根目录下的所有条目
+	fileInfos, err := os.ReadDir(dirname)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// 遍历所有条目
+	for _, fi := range fileInfos {
+		// 只处理文件夹
+		if !fi.IsDir() {
+			continue
+		}
+
+		// 跳过已经标记为 moved 的文件夹
+		if strings.Contains(fi.Name(), "moved") {
+			continue
+		}
+
+		folderPath := path.Join(dirname, fi.Name())
+
+		// 读取文件夹内的所有文件
+		subFiles, err := os.ReadDir(folderPath)
+		if err != nil {
+			fmt.Printf("读取文件夹失败: %s, err: %v\n", folderPath, err)
+			continue
+		}
+
+		// 查找文件夹内的 .mp4 文件
+		var mp4Files []string
+		for _, subFile := range subFiles {
+			if !subFile.IsDir() && strings.HasSuffix(strings.ToLower(subFile.Name()), ".mp4") {
+				mp4Files = append(mp4Files, subFile.Name())
+			}
+		}
+
+		// 如果找到 .mp4 文件，则移动到根目录
+		if len(mp4Files) > 0 {
+			for _, mp4File := range mp4Files {
+				sourcePath := path.Join(folderPath, mp4File)
+				destPath := path.Join(dirname, mp4File)
+
+				// 如果目标文件已存在，添加文件夹名前缀避免冲突
+				if _, err := os.Stat(destPath); err == nil {
+					// 文件已存在，使用文件夹名作为前缀
+					newName := fi.Name() + "-" + mp4File
+					destPath = path.Join(dirname, newName)
+					fmt.Printf("文件已存在，重命名为: %s\n", newName)
+				}
+
+				// 移动文件
+				err = os.Rename(sourcePath, destPath)
+				if err != nil {
+					fmt.Printf("移动文件失败: %s -> %s, err: %v\n", sourcePath, destPath, err)
+					continue
+				}
+				fmt.Printf("移动文件成功: %s -> %s\n", sourcePath, destPath)
+			}
+
+			// 标记文件夹为 moved
+			newFolderName := fi.Name() + "_moved"
+			newFolderPath := path.Join(dirname, newFolderName)
+			err = os.Rename(folderPath, newFolderPath)
+			if err != nil {
+				fmt.Printf("重命名文件夹失败: %s -> %s, err: %v\n", folderPath, newFolderPath, err)
+			} else {
+				fmt.Printf("标记文件夹为 moved: %s -> %s\n", fi.Name(), newFolderName)
 			}
 		}
 	}
